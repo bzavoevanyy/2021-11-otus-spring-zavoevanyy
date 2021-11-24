@@ -8,5 +8,17 @@
     <bean id="questionservice" class="ru.otus.service.QuestionServiceImpl">
         <constructor-arg name="questionDao" ref="questionDao"/>
     </bean>
+    <bean id="printstream" class="java.io.PrintStream">
+        <constructor-arg ref="baos"/>
+        <constructor-arg value="true"/>
+        <constructor-arg value="UTF-8"/>
+    </bean>
+    <bean id="baos" class="java.io.ByteArrayOutputStream">
 
+    </bean>
+    <bean id="quizservice" class="ru.otus.service.QuizServiceImpl">
+        <constructor-arg ref="printstream"/>
+        <constructor-arg ref="questionservice"/>
+        <constructor-arg ref="baos"/>
+    </bean>
 </beans>
