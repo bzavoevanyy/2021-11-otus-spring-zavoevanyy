@@ -3,10 +3,8 @@ package ru.otus.dao;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.domain.Question;
-
 import java.util.List;
 import java.util.Objects;
-
 import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("QuestionDaoImpl test")
@@ -16,10 +14,15 @@ class QuestionDaoImplTest {
     @Test
     @DisplayName("Method findAll should return right List")
     void check_returned_list_by_method_findAll_with_good_csv() {
-        questionDao = new QuestionDaoImpl("data/quiz.csv");
+        questionDao = new QuestionDaoImpl("data/quiztest.csv");
         List<Question> allQuestions = questionDao.findAll();
-        assertThat(allQuestions).hasSize(5).allMatch(Objects::nonNull)
-                .map(Question::getId).contains(1, 2, 3, 4, 5);
+        assertThat(allQuestions).hasSize(1).allMatch(Objects::nonNull)
+                .allSatisfy(question -> {
+                   assertThat(question.getId()).isEqualTo(1);
+                   assertThat(question.getQuestion()).isEqualTo("question1");
+                   assertThat(question.getOptions()).containsOnly("option1", "option2", "option3", "option4");
+                   assertThat(question.getRightAnswerIndex()).isEqualTo(1);
+                });
     }
 
     @Test
