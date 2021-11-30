@@ -1,0 +1,6 @@
+id;question;option1;option2;option3;option4;rightAnswer
+1;Which Map class should be most popular in a multi-threading environment, considering performance constraint?;Hashtable;CopyOnWriteMap;ConcurrentHashMap;ConcurrentMap;2
+2;Which permits the removal of elements from a collection?;Enumeration;Iterator;None of the above;;2
+3;The Comparator interface contains the method?;compareWith;compareTo();compare();;3
+4;Which offers the best performance?;TreeMap;HashMap;LinkedHashMap;;2
+5;Which of those is synchronized?;ArrayList;LinkedList;Vector;None of the above;3
