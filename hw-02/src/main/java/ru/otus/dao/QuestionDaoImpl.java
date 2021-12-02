@@ -6,6 +6,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
+import ru.otus.domain.AnswerOption;
 import ru.otus.domain.Question;
 
 import java.io.InputStreamReader;
@@ -52,10 +53,17 @@ public class QuestionDaoImpl implements QuestionDao {
         return records.stream().map((record) -> {
             int id = Integer.parseInt(record.get("id"));
             String question = record.get("question");
-            List<String> options = Stream.of(record.get("option1"), record.get("option2"), record.get("option3"), record.get("option4"))
-                    .filter(option -> Objects.nonNull(option) && !option.isEmpty()).collect(Collectors.toList());
+            List<AnswerOption> options = Stream.of(
+                            record.get("option1"),
+                            record.get("option2"),
+                            record.get("option3"),
+                            record.get("option4"))
+                    .filter(option -> Objects.nonNull(option) && !option.isEmpty())
+                    .map(AnswerOption::new)
+                    .collect(Collectors.toList());
             int rightAnswerIndex = Integer.parseInt(record.get("rightAnswer"));
-            return new Question(id, question, options, rightAnswerIndex);
+            options.get(rightAnswerIndex - 1).setRight(true);
+            return new Question(id, question, options);
         }).collect(Collectors.toList());
     }
 }

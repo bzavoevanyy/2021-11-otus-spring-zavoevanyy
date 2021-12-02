@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.dao.QuestionDao;
 import ru.otus.dao.QuestionDaoImpl;
+import ru.otus.domain.AnswerOption;
 import ru.otus.domain.Question;
 
 import java.util.List;
@@ -24,8 +25,9 @@ class QuestionDaoImplTest {
                 .allSatisfy(question -> {
                    assertThat(question.getId()).isEqualTo(1);
                    assertThat(question.getQuestion()).isEqualTo("question1");
-                   assertThat(question.getOptions()).containsOnly("option1", "option2", "option3", "option4");
-                   assertThat(question.getRightAnswerIndex()).isEqualTo(1);
+                   assertThat(question.getOptions()).map(AnswerOption::getOption)
+                           .containsOnly("option1", "option2", "option3", "option4");
+                   assertThat(question.getOptions().get(0).isRight()).isEqualTo(true);
                 });
     }
 

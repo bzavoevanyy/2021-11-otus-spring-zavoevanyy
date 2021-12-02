@@ -11,6 +11,8 @@ import java.util.List;
 public class Question {
     private final int id;
     private final String question;
-    private final List<String> options;
-    private final int rightAnswerIndex;
+    private final List<AnswerOption> options;
+    public String getOption(int index) {
+        return this.options.get(index).getOption();
+    }
 }

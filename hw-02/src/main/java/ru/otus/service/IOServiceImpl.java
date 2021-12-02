@@ -8,11 +8,11 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 @Service
-public class ConsoleIOService implements IOService {
+public class IOServiceImpl implements IOService {
     private final PrintStream out;
     private final Scanner scanner;
 
-    public ConsoleIOService(@Value("#{T(System).out}") PrintStream out, @Value("#{T(System).in}") BufferedInputStream inputStream) {
+    public IOServiceImpl(@Value("#{T(System).out}") PrintStream out, @Value("#{T(System).in}") BufferedInputStream inputStream) {
         this.out = out;
         this.scanner = new Scanner(inputStream);
     }
@@ -25,5 +25,11 @@ public class ConsoleIOService implements IOService {
     @Override
     public String readString() {
         return scanner.nextLine();
+    }
+
+    @Override
+    public String readString(String message) {
+        outString(message);
+        return readString();
     }
 }

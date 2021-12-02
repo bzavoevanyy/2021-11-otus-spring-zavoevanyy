@@ -1,11 +1,10 @@
 package ru.otus.domain;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@Component
+@RequiredArgsConstructor
 public class Participant {
-    private String name;
-    private int score;
+    private final String name;
 }
