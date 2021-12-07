@@ -1,0 +1,19 @@
+spring:
+  messages:
+    basename: i18n/messages
+  main:
+    banner-mode: console
+    web-application-type: none
+    log-startup-info: false
+quiz:
+  headers:
+    - id
+    - question
+    - option1
+    - option2
+    - option3
+    - option4
+    - rightAnswer
+  minScore: 4
+  locale: en
+
