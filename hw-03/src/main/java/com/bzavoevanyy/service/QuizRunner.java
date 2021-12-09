@@ -1,9 +1,10 @@
 package com.bzavoevanyy.service;
 
 import com.bzavoevanyy.config.AppProps;
+import com.bzavoevanyy.utils.MessageSourceWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.context.MessageSource;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 import com.bzavoevanyy.domain.Participant;
 import com.bzavoevanyy.domain.Question;
@@ -14,22 +15,21 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
-public class QuizServiceImpl implements QuizService {
+public class QuizRunner implements CommandLineRunner {
 
     private final QuestionService questionService;
     private final IOService ioService;
     private final AppProps appProps;
-    private final MessageSource messageSource;
+    private final MessageSourceWrapper messageSource;
 
     @Override
-    public void runQuiz() {
+    public void run(String... args) {
         chooseLanguage();
         val participant = getParticipant();
         val questions = questionService.getAllQuestions();
         val quizResult = quizProcessing(participant, questions);
         val resultMessage = makeResultMessage(quizResult);
         ioService.outString(resultMessage);
-
     }
 
     private QuizResult quizProcessing(Participant participant, List<Question> questions) {
@@ -39,8 +39,7 @@ public class QuizServiceImpl implements QuizService {
             boolean checkAnswerResult;
             val optionsCount = question.getOptions().size();
             do {
-                val answer = ioService.readString(messageSource
-                        .getMessage("quiz.get-answer", null, appProps.getLocale()));
+                val answer = ioService.readString(messageSource.getMessage("quiz.get-answer"));
                 checkAnswerResult = answer.matches("\\d") && Integer.parseInt(answer) <= optionsCount;
                 if (checkAnswerResult) {
                     val answerToInt = Integer.parseInt(answer);
@@ -48,8 +47,7 @@ public class QuizServiceImpl implements QuizService {
                         rightAnswerCounter = rightAnswerCounter + 1;
                     }
                 } else {
-                    val message = messageSource
-                            .getMessage("quiz.wrong-input", null, appProps.getLocale());
+                    val message = messageSource.getMessage("quiz.wrong-input");
                     ioService.outString(String.format(message, optionsCount));
                     ioService.outString(System.lineSeparator());
                 }
@@ -61,7 +59,7 @@ public class QuizServiceImpl implements QuizService {
     private void chooseLanguage() {
         val message = new StringBuilder();
         val lineSeparator = System.lineSeparator();
-        message.append(messageSource.getMessage("quiz.choose-lang", null, appProps.getLocale()))
+        message.append(messageSource.getMessage("quiz.choose-lang"))
                 .append(lineSeparator)
                 .append("1. English")
                 .append(lineSeparator)
@@ -82,7 +80,7 @@ public class QuizServiceImpl implements QuizService {
 
     private Participant getParticipant() {
         val message = messageSource
-                .getMessage("quiz.get-name", null, appProps.getLocale());
+                .getMessage("quiz.get-name");
         val name = ioService.readString(message);
         return new Participant(name);
     }
@@ -98,16 +96,13 @@ public class QuizServiceImpl implements QuizService {
         val lineSeparator = System.getProperty("line.separator");
         resultMessage.append(lineSeparator);
         if (checkResults(score)) {
-            val message = messageSource
-                    .getMessage("quiz.test-pass", null, appProps.getLocale());
+            val message = messageSource.getMessage("quiz.test-pass");
             resultMessage.append(message);
         } else {
-            val message = messageSource
-                    .getMessage("quiz.test-fail", null, appProps.getLocale());
+            val message = messageSource.getMessage("quiz.test-fail");
             resultMessage.append(message);
         }
-        resultMessage.append(messageSource
-                .getMessage("quiz.test-scores", null, appProps.getLocale()));
+        resultMessage.append(messageSource.getMessage("quiz.test-scores"));
         resultMessage.append(quizResult.getScore());
         resultMessage.append(lineSeparator);
         return resultMessage.toString();

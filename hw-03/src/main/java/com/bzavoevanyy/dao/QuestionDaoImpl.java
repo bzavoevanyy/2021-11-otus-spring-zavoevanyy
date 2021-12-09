@@ -1,11 +1,11 @@
 package com.bzavoevanyy.dao;
 
-import com.bzavoevanyy.config.AppProps;
+import com.bzavoevanyy.config.QuestionDaoProps;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.context.MessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
 import com.bzavoevanyy.domain.AnswerOption;
@@ -22,17 +22,16 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class QuestionDaoImpl implements QuestionDao {
 
-    private final AppProps appProps;
-    private final MessageSource messageSource;
+    private final QuestionDaoProps props;
 
     @Override
     public List<Question> findAll() throws QuestionsLoadingExceptions {
-        String quizFile = messageSource.getMessage("quiz.source", null, appProps.getLocale());
+        val quizFile = String.format(props.getFileNameTemplate(), "_", props.getLocale());
         try (final Reader in = new InputStreamReader(new ClassPathResource(quizFile).getInputStream());
              // Create csv parser
              final CSVParser parse = CSVParser.parse(in, CSVFormat.Builder
                      .create()
-                     .setHeader(appProps.getHeaders())
+                     .setHeader(props.getHeaders())
                      .setDelimiter(";")
                      .setAllowMissingColumnNames(false)
                      .setSkipHeaderRecord(true)

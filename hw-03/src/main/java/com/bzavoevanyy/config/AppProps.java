@@ -15,8 +15,9 @@ import java.util.Locale;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class AppProps {
+public class AppProps implements QuestionDaoProps, LocaleGetterProps {
     private int minScore;
     private String[] headers;
     private Locale locale;
+    private String fileNameTemplate;
 }
