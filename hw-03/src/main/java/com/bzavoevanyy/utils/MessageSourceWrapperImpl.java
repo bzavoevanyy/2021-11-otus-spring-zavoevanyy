@@ -12,12 +12,7 @@ public class MessageSourceWrapperImpl implements MessageSourceWrapper {
     private final LocaleGetterProps localeProps;
 
     @Override
-    public String getMessage(String code, Object[] args) {
-        return messageSource.getMessage(code, args, localeProps.getLocale());
-    }
-
-    @Override
-    public String getMessage(String code) {
-        return messageSource.getMessage(code, null, localeProps.getLocale());
+    public String getMessage(String code, Object ...args) {
+        return messageSource.getMessage(code, args, code, localeProps.getLocale());
     }
 }

@@ -1,10 +1,8 @@
 package com.bzavoevanyy.service;
 
 import com.bzavoevanyy.config.AppProps;
-import com.bzavoevanyy.utils.MessageSourceWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 import com.bzavoevanyy.domain.Participant;
 import com.bzavoevanyy.domain.Question;
@@ -15,21 +13,19 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
-public class QuizRunner implements CommandLineRunner {
+public class QuizServiceImpl implements QuizService {
 
     private final QuestionService questionService;
     private final IOService ioService;
-    private final AppProps appProps;
-    private final MessageSourceWrapper messageSource;
+    private final AppProps props;
 
     @Override
-    public void run(String... args) {
+    public void runQuiz() {
         chooseLanguage();
         val participant = getParticipant();
         val questions = questionService.getAllQuestions();
         val quizResult = quizProcessing(participant, questions);
-        val resultMessage = makeResultMessage(quizResult);
-        ioService.outString(resultMessage);
+        showResultMessage(quizResult);
     }
 
     private QuizResult quizProcessing(Participant participant, List<Question> questions) {
@@ -39,7 +35,7 @@ public class QuizRunner implements CommandLineRunner {
             boolean checkAnswerResult;
             val optionsCount = question.getOptions().size();
             do {
-                val answer = ioService.readString(messageSource.getMessage("quiz.get-answer"));
+                val answer = ioService.readString("quiz.get-answer");
                 checkAnswerResult = answer.matches("\\d") && Integer.parseInt(answer) <= optionsCount;
                 if (checkAnswerResult) {
                     val answerToInt = Integer.parseInt(answer);
@@ -47,8 +43,7 @@ public class QuizRunner implements CommandLineRunner {
                         rightAnswerCounter = rightAnswerCounter + 1;
                     }
                 } else {
-                    val message = messageSource.getMessage("quiz.wrong-input");
-                    ioService.outString(String.format(message, optionsCount));
+                    ioService.outString("quiz.wrong-input", optionsCount);
                     ioService.outString(System.lineSeparator());
                 }
             } while (!checkAnswerResult);
@@ -59,8 +54,8 @@ public class QuizRunner implements CommandLineRunner {
     private void chooseLanguage() {
         val message = new StringBuilder();
         val lineSeparator = System.lineSeparator();
-        message.append(messageSource.getMessage("quiz.choose-lang"))
-                .append(lineSeparator)
+        ioService.outString("quiz.choose-lang");
+        message.append(lineSeparator)
                 .append("1. English")
                 .append(lineSeparator)
                 .append("2. Russian")
@@ -70,42 +65,32 @@ public class QuizRunner implements CommandLineRunner {
             val i = Integer.parseInt(s);
             if (i > 0 && i <= 2) {
                 if (i == 1) {
-                    appProps.setLocale(Locale.ENGLISH);
+                    props.setLocale(Locale.ENGLISH);
                 } else {
-                    appProps.setLocale(Locale.forLanguageTag("ru-RU"));
+                    props.setLocale(Locale.forLanguageTag("ru-RU"));
                 }
             }
         }
     }
 
     private Participant getParticipant() {
-        val message = messageSource
-                .getMessage("quiz.get-name");
-        val name = ioService.readString(message);
+        val name = ioService.readString("quiz.get-name");
         return new Participant(name);
     }
 
     private boolean checkResults(int score) {
-        return appProps.getMinScore() <= score;
+        return props.getMinScore() <= score;
     }
 
 
-    private String makeResultMessage(QuizResult quizResult) {
-        val resultMessage = new StringBuilder(quizResult.getParticipantName());
-        val score = quizResult.getScore();
-        val lineSeparator = System.getProperty("line.separator");
-        resultMessage.append(lineSeparator);
-        if (checkResults(score)) {
-            val message = messageSource.getMessage("quiz.test-pass");
-            resultMessage.append(message);
+    private void showResultMessage(QuizResult quizResult) {
+        if (checkResults(quizResult.getScore())) {
+            ioService.outString("quiz.test-pass", quizResult.getParticipantName());
         } else {
-            val message = messageSource.getMessage("quiz.test-fail");
-            resultMessage.append(message);
+            ioService.outString("quiz.test-fail", quizResult.getParticipantName());
         }
-        resultMessage.append(messageSource.getMessage("quiz.test-scores"));
-        resultMessage.append(quizResult.getScore());
-        resultMessage.append(lineSeparator);
-        return resultMessage.toString();
+        ioService.outString("quiz.test-scores", quizResult.getScore());
+        ioService.outString(System.lineSeparator());
     }
 
     private String makeQuestionMessage(List<Question> questions) {

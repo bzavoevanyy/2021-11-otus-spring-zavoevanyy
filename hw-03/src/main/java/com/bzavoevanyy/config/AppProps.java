@@ -1,7 +1,6 @@
 package com.bzavoevanyy.config;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,10 +13,13 @@ import java.util.Locale;
 @ConfigurationProperties(prefix = "quiz")
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class AppProps implements QuestionDaoProps, LocaleGetterProps {
     private int minScore;
     private String[] headers;
     private Locale locale;
-    private String fileNameTemplate;
+    private String fileName;
+
+    public String getFileName() {
+        return String.format(this.fileName, "_", this.locale);
+    }
 }

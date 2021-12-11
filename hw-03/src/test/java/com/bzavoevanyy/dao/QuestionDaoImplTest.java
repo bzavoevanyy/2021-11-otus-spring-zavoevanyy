@@ -31,7 +31,7 @@ class QuestionDaoImplTest {
     @Test
     @DisplayName("Method findAll should return right List")
     void check_returned_list_by_method_findAll_with_good_csv() {
-        when(props.getFileNameTemplate()).thenReturn("data/quiz-test.csv");
+        when(props.getFileName()).thenReturn("data/quiz-test.csv");
         questionDao = new QuestionDaoImpl(props);
         List<Question> allQuestions = questionDao.findAll();
         assertThat(allQuestions).hasSize(1).allMatch(Objects::nonNull)
@@ -47,7 +47,7 @@ class QuestionDaoImplTest {
     @Test
     @DisplayName("Method findAll should throw QuestionLoadingException")
     void check_findAll_throw_exception_with_wrong_csv() {
-        when(props.getFileNameTemplate()).thenReturn("data/wrong.csv");
+        when(props.getFileName()).thenReturn("data/wrong.csv");
         questionDao = new QuestionDaoImpl(props);
         assertThatThrownBy(() -> questionDao.findAll()).hasMessageContaining("Wrong CSV file");
     }

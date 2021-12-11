@@ -26,7 +26,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
     @Override
     public List<Question> findAll() throws QuestionsLoadingExceptions {
-        val quizFile = String.format(props.getFileNameTemplate(), "_", props.getLocale());
+        val quizFile = props.getFileName();
         try (final Reader in = new InputStreamReader(new ClassPathResource(quizFile).getInputStream());
              // Create csv parser
              final CSVParser parse = CSVParser.parse(in, CSVFormat.Builder

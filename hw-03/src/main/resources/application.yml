@@ -16,5 +16,5 @@ quiz:
     - rightAnswer
   min-score: 4
   locale: en
-  file-name-template: data/quiz%s%s.csv
+  file-name: data/quiz%s%s.csv
 
