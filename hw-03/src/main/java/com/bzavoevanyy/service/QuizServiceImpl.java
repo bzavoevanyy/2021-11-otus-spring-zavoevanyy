@@ -17,6 +17,7 @@ public class QuizServiceImpl implements QuizService {
 
     private final QuestionService questionService;
     private final IOService ioService;
+    private final IOMessageSourceService ioMessageSourceService;
     private final AppProps props;
 
     @Override
@@ -35,7 +36,7 @@ public class QuizServiceImpl implements QuizService {
             boolean checkAnswerResult;
             val optionsCount = question.getOptions().size();
             do {
-                val answer = ioService.readString("quiz.get-answer");
+                val answer = ioMessageSourceService.readWithMessage("quiz.get-answer");
                 checkAnswerResult = answer.matches("\\d") && Integer.parseInt(answer) <= optionsCount;
                 if (checkAnswerResult) {
                     val answerToInt = Integer.parseInt(answer);
@@ -43,7 +44,7 @@ public class QuizServiceImpl implements QuizService {
                         rightAnswerCounter = rightAnswerCounter + 1;
                     }
                 } else {
-                    ioService.outString("quiz.wrong-input", optionsCount);
+                    ioMessageSourceService.writeMessage("quiz.wrong-input", optionsCount);
                     ioService.outString(System.lineSeparator());
                 }
             } while (!checkAnswerResult);
@@ -54,7 +55,7 @@ public class QuizServiceImpl implements QuizService {
     private void chooseLanguage() {
         val message = new StringBuilder();
         val lineSeparator = System.lineSeparator();
-        ioService.outString("quiz.choose-lang");
+        ioMessageSourceService.writeMessage("quiz.choose-lang");
         message.append(lineSeparator)
                 .append("1. English")
                 .append(lineSeparator)
@@ -74,7 +75,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private Participant getParticipant() {
-        val name = ioService.readString("quiz.get-name");
+        val name = ioMessageSourceService.readWithMessage("quiz.get-name");
         return new Participant(name);
     }
 
@@ -85,11 +86,11 @@ public class QuizServiceImpl implements QuizService {
 
     private void showResultMessage(QuizResult quizResult) {
         if (checkResults(quizResult.getScore())) {
-            ioService.outString("quiz.test-pass", quizResult.getParticipantName());
+            ioMessageSourceService.writeMessage("quiz.test-pass", quizResult.getParticipantName());
         } else {
-            ioService.outString("quiz.test-fail", quizResult.getParticipantName());
+            ioMessageSourceService.writeMessage("quiz.test-fail", quizResult.getParticipantName());
         }
-        ioService.outString("quiz.test-scores", quizResult.getScore());
+        ioMessageSourceService.writeMessage("quiz.test-scores", quizResult.getScore());
         ioService.outString(System.lineSeparator());
     }
 

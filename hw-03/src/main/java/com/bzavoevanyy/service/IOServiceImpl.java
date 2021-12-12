@@ -1,6 +1,5 @@
 package com.bzavoevanyy.service;
 
-import com.bzavoevanyy.utils.MessageSourceWrapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,19 +11,16 @@ import java.util.Scanner;
 public class IOServiceImpl implements IOService {
     private final PrintStream out;
     private final Scanner scanner;
-    private final MessageSourceWrapper messageSource;
 
     public IOServiceImpl(@Value("#{T(System).out}") PrintStream out,
-                         @Value("#{T(System).in}") BufferedInputStream inputStream,
-                         MessageSourceWrapper messageSource) {
+                         @Value("#{T(System).in}") BufferedInputStream inputStream) {
         this.out = out;
         this.scanner = new Scanner(inputStream);
-        this.messageSource = messageSource;
     }
 
     @Override
-    public void outString(String message, Object... args) {
-        out.print(messageSource.getMessage(message, args));
+    public void outString(String message) {
+        out.print(message);
     }
 
     @Override
@@ -33,8 +29,8 @@ public class IOServiceImpl implements IOService {
     }
 
     @Override
-    public String readString(String message, Object... args) {
-        outString(message, args);
+    public String readString(String message) {
+        outString(message);
         return readString();
     }
 }
