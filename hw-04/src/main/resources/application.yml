@@ -1,0 +1,28 @@
+spring:
+  messages:
+    basename: i18n/messages
+  main:
+    banner-mode: console
+    web-application-type: none
+    log-startup-info: false
+    allow-circular-references: true
+
+quiz:
+  headers:
+    - id
+    - question
+    - option1
+    - option2
+    - option3
+    - option4
+    - rightAnswer
+  min-score: 4
+  locale: en
+  file-name: data/quiz%s%s.csv
+
+shell:
+  out:
+    info: CYAN
+    success: GREEN
+    warning: YELLOW
+    error: RED
