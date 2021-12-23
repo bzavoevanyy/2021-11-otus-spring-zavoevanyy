@@ -38,7 +38,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public List<Author> getAll() {
-        return jdbc.query("select * from authors", new AuthorSetMapper());
+        return jdbc.query("select author_id, author_name from authors", new AuthorSetMapper());
     }
 
     private static class AuthorMapper implements RowMapper<Author> {

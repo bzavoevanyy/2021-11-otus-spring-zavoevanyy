@@ -26,13 +26,15 @@ public class GenreDaoImpl implements GenreDao {
     @Override
     public Genre getById(long id) {
         Map<String, Object> param = Collections.singletonMap("id", id);
-        return namedParameterJdbcOperations.queryForObject("select * from genres where genre_id = :id", param,
+        return namedParameterJdbcOperations.queryForObject("select genre_id, genre_name" +
+                        " from genres where genre_id = :id", param,
                 new GenreMapper());
     }
 
     @Override
     public List<Genre> getAll() {
-        return jdbc.query("select * from genres", new GenreSetMapper());
+        return jdbc.query("select genre_id, genre_name" +
+                " from genres", new GenreSetMapper());
     }
 
     private static class GenreMapper implements RowMapper<Genre> {

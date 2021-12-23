@@ -24,19 +24,22 @@ import java.util.Map;
 public class BookDaoImpl implements BookDao {
     private final JdbcOperations jdbc;
     private final NamedParameterJdbcOperations namedParameterJdbcOperations;
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
 
     @Override
     public Book getById(long id) {
         final Map<String, Object> params = Collections.singletonMap("id", id);
-        return namedParameterJdbcOperations.queryForObject("select * from books where book_id = :id", params,
+        return namedParameterJdbcOperations.queryForObject("select book_id, book_title, books.author_id," +
+                        " author_name, books.genre_id, genre_name from books, authors, genres " +
+                        "where books.author_id = authors.author_id and books.genre_id = genres.genre_id " +
+                        "and book_id = :id", params,
                 new BookMapper());
     }
 
     @Override
     public List<Book> getAll() {
-        return jdbc.query("select * from books", new BookSetMapper());
+        return jdbc.query("select book_id, book_title, books.author_id," +
+                " author_name, books.genre_id, genre_name from books, authors, genres " +
+                "where books.author_id = authors.author_id and books.genre_id = genres.genre_id", new BookSetMapper());
     }
 
     @Override
@@ -65,18 +68,19 @@ public class BookDaoImpl implements BookDao {
         namedParameterJdbcOperations.update("delete from books where book_id = :book_id", param);
     }
 
-    private class BookMapper implements RowMapper<Book> {
+    private static class BookMapper implements RowMapper<Book> {
 
         @Override
-        public Book mapRow(ResultSet resultSet, int i) throws SQLException {
-            long id = resultSet.getLong("book_id");
-            String title = resultSet.getString("book_title");
-            Author author = authorDao.getById(resultSet.getLong("author_id"));
-            Genre genre = genreDao.getById(resultSet.getLong("genre_id"));
+        public Book mapRow(ResultSet rs, int i) throws SQLException {
+            long id = rs.getLong("book_id");
+            String title = rs.getString("book_title");
+            Author author = new Author(rs.getLong("books.author_id"), rs.getString("author_name"));
+            Genre genre = new Genre(rs.getLong("books.genre_id"), rs.getString("genre_name"));
             return new Book(id, title, author, genre);
         }
     }
-    private class BookSetMapper implements ResultSetExtractor<List<Book>> {
+
+    private static class BookSetMapper implements ResultSetExtractor<List<Book>> {
 
         @Override
         public List<Book> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -84,8 +88,8 @@ public class BookDaoImpl implements BookDao {
             while (rs.next()) {
                 long id = rs.getLong("book_id");
                 String title = rs.getString("book_title");
-                Author author = authorDao.getById(rs.getLong("author_id"));
-                Genre genre = genreDao.getById(rs.getLong("genre_id"));
+                Author author = new Author(rs.getLong("books.author_id"), rs.getString("author_name"));
+                Genre genre = new Genre(rs.getLong("books.genre_id"), rs.getString("genre_name"));
                 books.add(new Book(id, title, author, genre));
             }
             return books;

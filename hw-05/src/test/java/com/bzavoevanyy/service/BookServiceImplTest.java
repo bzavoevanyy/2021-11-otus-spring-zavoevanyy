@@ -6,7 +6,10 @@ import com.bzavoevanyy.domain.Book;
 import com.bzavoevanyy.domain.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +17,13 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 @DisplayName("Book service test")
 class BookServiceImplTest {
-
-    private final BookDao bookDao = Mockito.mock(BookDao.class);
-    private final BookService bookService = new BookServiceImpl(bookDao);
+    @MockBean
+    private BookDao bookDao;
+    @Autowired
+    private BookService bookService;
 
     @Test
     @DisplayName(" should call BookDao.getAll and return list books")
