@@ -44,7 +44,7 @@ class ShellCommandsTest {
         doNothing().when(appProps).setLocale(any());
         when(appProps.getLanguages()).thenReturn(Map.of("en", "en", "ru", "ru-RU"));
         String resultMessage = (String) shell.evaluate(() -> COMMAND_LANG_RU);
-        String expectedMessage = shellHelper.getSuccessMessage("You chose successfully language");
+        String expectedMessage = shellHelper.getSuccessMessage("You successfully change language");
 
         verify(appProps, times(1)).setLocale(Locale.forLanguageTag("ru-RU"));
         assertThat(resultMessage).isEqualTo(expectedMessage);
@@ -57,7 +57,7 @@ class ShellCommandsTest {
         when(appProps.getLanguages()).thenReturn(Map.of("en", "en", "ru", "ru-RU"));
 
         String resultMessage = (String) shell.evaluate(() -> COMMAND_LANG_EN);
-        String expectedMessage = shellHelper.getSuccessMessage("You chose successfully language");
+        String expectedMessage = shellHelper.getSuccessMessage("You successfully change language");
 
         verify(appProps, times(1)).setLocale(Locale.forLanguageTag("en"));
         assertThat(resultMessage).isEqualTo(expectedMessage);
