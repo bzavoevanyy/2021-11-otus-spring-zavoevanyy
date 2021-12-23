@@ -38,7 +38,7 @@ public class ShellCommands {
     @ShellMethod(value = "Choose language.", key = "lang")
     public String chooseLang(@ShellOption(defaultValue = "") String language) {
         langService.setLocaleProp(language);
-        return shellHelper.getSuccessMessage("You chose successfully language");
+        return shellHelper.getSuccessMessage("You successfully change language");
     }
 
     public Availability checkRegistration() {
