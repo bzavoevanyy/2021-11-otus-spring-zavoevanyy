@@ -17,6 +17,9 @@ quiz:
     - rightAnswer
   min-score: 4
   locale: en
+  languages:
+    en: en
+    ru: ru-RU
   file-name: data/quiz-test.csv
 shell:
   out:

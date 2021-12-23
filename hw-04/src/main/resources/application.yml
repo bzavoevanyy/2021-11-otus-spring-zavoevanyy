@@ -19,6 +19,9 @@ quiz:
   min-score: 4
   locale: en
   file-name: data/quiz%s%s.csv
+  languages:
+    en: en
+    ru: ru-RU
 
 shell:
   out:

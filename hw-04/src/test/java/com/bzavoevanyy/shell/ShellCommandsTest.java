@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.CommandNotCurrentlyAvailable;
 import org.springframework.shell.Shell;
 import java.util.Locale;
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,11 +42,11 @@ class ShellCommandsTest {
     @DisplayName(" should set Locale in appProps to ru and return right message")
     public void shouldChangeLangToRussian() {
         doNothing().when(appProps).setLocale(any());
-
+        when(appProps.getLanguages()).thenReturn(Map.of("en", "en", "ru", "ru-RU"));
         String resultMessage = (String) shell.evaluate(() -> COMMAND_LANG_RU);
-        String expectedMessage = shellHelper.getSuccessMessage("You chose ru language");
+        String expectedMessage = shellHelper.getSuccessMessage("You chose successfully language");
 
-        verify(appProps, times(1)).setLocale(any());
+        verify(appProps, times(1)).setLocale(Locale.forLanguageTag("ru-RU"));
         assertThat(resultMessage).isEqualTo(expectedMessage);
     }
 
@@ -53,11 +54,12 @@ class ShellCommandsTest {
     @DisplayName(" should set Locale in appProps to en and return right message")
     public void shouldChangeLangToEnglish() {
         doNothing().when(appProps).setLocale(any());
+        when(appProps.getLanguages()).thenReturn(Map.of("en", "en", "ru", "ru-RU"));
 
         String resultMessage = (String) shell.evaluate(() -> COMMAND_LANG_EN);
-        String expectedMessage = shellHelper.getSuccessMessage("You chose en language");
+        String expectedMessage = shellHelper.getSuccessMessage("You chose successfully language");
 
-        verify(appProps, times(1)).setLocale(any());
+        verify(appProps, times(1)).setLocale(Locale.forLanguageTag("en"));
         assertThat(resultMessage).isEqualTo(expectedMessage);
     }
 
