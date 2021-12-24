@@ -4,16 +4,13 @@ import com.bzavoevanyy.domain.Author;
 import com.bzavoevanyy.domain.Book;
 import com.bzavoevanyy.domain.Genre;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +36,7 @@ public class BookDaoImpl implements BookDao {
     public List<Book> getAll() {
         return jdbc.query("select book_id, book_title, books.author_id," +
                 " author_name, books.genre_id, genre_name from books, authors, genres " +
-                "where books.author_id = authors.author_id and books.genre_id = genres.genre_id", new BookSetMapper());
+                "where books.author_id = authors.author_id and books.genre_id = genres.genre_id", new BookMapper());
     }
 
     @Override
@@ -77,22 +74,6 @@ public class BookDaoImpl implements BookDao {
             Author author = new Author(rs.getLong("books.author_id"), rs.getString("author_name"));
             Genre genre = new Genre(rs.getLong("books.genre_id"), rs.getString("genre_name"));
             return new Book(id, title, author, genre);
-        }
-    }
-
-    private static class BookSetMapper implements ResultSetExtractor<List<Book>> {
-
-        @Override
-        public List<Book> extractData(ResultSet rs) throws SQLException, DataAccessException {
-            List<Book> books = new ArrayList<>();
-            while (rs.next()) {
-                long id = rs.getLong("book_id");
-                String title = rs.getString("book_title");
-                Author author = new Author(rs.getLong("books.author_id"), rs.getString("author_name"));
-                Genre genre = new Genre(rs.getLong("books.genre_id"), rs.getString("genre_name"));
-                books.add(new Book(id, title, author, genre));
-            }
-            return books;
         }
     }
 }

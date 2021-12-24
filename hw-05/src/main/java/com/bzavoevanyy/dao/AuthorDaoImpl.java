@@ -2,16 +2,13 @@ package com.bzavoevanyy.dao;
 
 import com.bzavoevanyy.domain.Author;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +35,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public List<Author> getAll() {
-        return jdbc.query("select author_id, author_name from authors", new AuthorSetMapper());
+        return jdbc.query("select author_id, author_name from authors", new AuthorMapper());
     }
 
     private static class AuthorMapper implements RowMapper<Author> {
@@ -50,19 +47,4 @@ public class AuthorDaoImpl implements AuthorDao {
             return new Author(author_id, author_name);
         }
     }
-
-    private static class AuthorSetMapper implements ResultSetExtractor<List<Author>> {
-
-        @Override
-        public List<Author> extractData(ResultSet rs) throws SQLException, DataAccessException {
-            List<Author> authors = new ArrayList<>();
-            while (rs.next()) {
-                long id = rs.getLong("author_id");
-                String authorName = rs.getString("author_name");
-                authors.add(new Author(id, authorName));
-            }
-            return authors;
-        }
-    }
-
 }
