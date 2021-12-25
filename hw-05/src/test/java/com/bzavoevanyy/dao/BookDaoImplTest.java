@@ -25,7 +25,7 @@ class BookDaoImplTest {
     void getById() {
         val book = bookDao.getById(1);
         assertThat(book).isNotNull().extracting(Book::getId, Book::getTitle, Book::getAuthorName, Book::getGenreName)
-                .containsExactly(1L, "Казаки", "Достоевский Ф.Н.", "Повесть");
+                .containsExactly(1L, "book1", "author2", "genre2");
     }
 
     @Test
@@ -42,7 +42,7 @@ class BookDaoImplTest {
         val testBook = bookDao.getById(4);
         bookDao.deleteById(4);
         assertThat(testBook).isNotNull().extracting(Book::getId, Book::getTitle, Book::getAuthorName, Book::getGenreName)
-                .containsExactly(4L, "test_book", "Пушкин А.С.", "Роман");
+                .containsExactly(4L, "test_book", "author1", "genre1");
     }
 
     @Test
@@ -54,7 +54,7 @@ class BookDaoImplTest {
                 new Genre(1L, null));
         bookDao.update(book1);
         assertThat(bookDao.getById(1)).isNotNull().extracting(Book::getId, Book::getTitle, Book::getAuthorName,
-                Book::getGenreName).containsExactly(1L, "new_title", "Пушкин А.С.", "Роман");
+                Book::getGenreName).containsExactly(1L, "new_title", "author1", "genre1");
         bookDao.update(book);
     }
 

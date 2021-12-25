@@ -5,7 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
-    <includeAll path="db/changelog/2021"/>
-    <includeAll path="db/changelog/data"/>
-    <includeAll path="db/changelog/test-data" context="TST"/>
+    <changeSet id="1639927668702-1" author="bogdanzavoevanyy" context="TST">
+        <loadData
+                tableName="books"
+                file="db/changelog/test-data/data/19-03-changelog--books.csv"
+                separator=";"/>
+    </changeSet>
 </databaseChangeLog>
