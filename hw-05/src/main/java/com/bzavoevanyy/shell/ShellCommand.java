@@ -32,12 +32,12 @@ public class ShellCommand {
     }
     @ShellMethod(value = "Create book.", key = "create-book")
     public String createBook() {
-        bookService.createBook(shellBookService.getBookArgs());
-        return shellHelper.getSuccessMessage("Book successfully created");
+        Long id = shellBookService.updateBookWithInputArgs();
+        return shellHelper.getSuccessMessage(String.format("Book successfully created with id %s", id));
     }
     @ShellMethod(value = "Update book.", key = "update-book")
     public String updateBook(@ShellOption long id) {
-        bookService.updateBook(shellBookService.getBookArgs(id));
+        int res = shellBookService.updateBookWithInputArgs(id);
         return shellHelper.getSuccessMessage("Book successfully updated");
     }
 }

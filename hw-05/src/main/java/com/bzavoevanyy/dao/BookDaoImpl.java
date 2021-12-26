@@ -4,9 +4,13 @@ import com.bzavoevanyy.domain.Author;
 import com.bzavoevanyy.domain.Book;
 import com.bzavoevanyy.domain.Genre;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -41,22 +45,24 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void insert(Book book) {
-        final Map<String, Object> param = Map.of(
+    public Long insert(Book book) {
+        val param = new MapSqlParameterSource(Map.of(
                 "title", book.getTitle(),
                 "author_id", book.getAuthor().getId(),
-                "genre_id", book.getGenre().getId());
+                "genre_id", book.getGenre().getId()));
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("insert into books (book_title, author_id, genre_id) " +
-                "values (:title, :author_id, :genre_id)", param);
+                "values (:title, :author_id, :genre_id)", param, keyHolder);
+        return keyHolder.getKeyAs(Long.class);
     }
 
     @Override
-    public void update(Book book) {
+    public int update(Book book) {
         final Map<String, Object> param = Map.of("book_id", book.getId(),
                 "book_title", book.getTitle(),
                 "author_id", book.getAuthor().getId(),
                 "genre_id", book.getGenre().getId());
-        namedParameterJdbcOperations.update("update books set book_title = :book_title, author_id = :author_id, " +
+        return namedParameterJdbcOperations.update("update books set book_title = :book_title, author_id = :author_id, " +
                 "genre_id = :genre_id where book_id = :book_id", param);
     }
 

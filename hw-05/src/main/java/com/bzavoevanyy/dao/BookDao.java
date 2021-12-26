@@ -7,7 +7,7 @@ import java.util.List;
 public interface BookDao {
     Book getById(long id);
     List<Book> getAll();
-    void insert(Book book);
-    void update(Book book);
+    Long insert(Book book);
+    int update(Book book);
     void deleteById(long id);
 }

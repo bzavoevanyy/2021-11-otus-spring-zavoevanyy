@@ -14,9 +14,7 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,23 +28,20 @@ public class ShellBookServiceImpl implements ShellBookService {
     private final ShellInputReader inputReader;
 
     @Override
-    public Map<String, Object> getBookArgs() {
-        val bookArgs = new HashMap<String, Object>();
-        bookArgs.put("book_title", getBookTitle());
-        bookArgs.put("author", getAuthor());
-        bookArgs.put("genre", getGenre());
-        return bookArgs;
+    public Long updateBookWithInputArgs() {
+        String bookTitle = getBookTitle();
+        Author author = getAuthor();
+        Genre genre = getGenre();
+        return bookService.createBook(bookTitle, author, genre);
     }
 
     @Override
-    public Map<String, Object> getBookArgs(long id) {
+    public int updateBookWithInputArgs(long id) {
         val book = bookDao.getById(id);
-        val bookArgs = new HashMap<String, Object>();
-        bookArgs.put("book_id", id);
-        bookArgs.put("book_title", getBookTitle(book.getTitle()));
-        bookArgs.put("author", getAuthor(book.getAuthor().getId().toString()));
-        bookArgs.put("genre", getGenre(book.getGenre().getId().toString()));
-        return bookArgs;
+        String bookTitle = getBookTitle(book.getTitle());
+        Author author = getAuthor(book.getAuthor().getId().toString());
+        Genre genre = getGenre(book.getGenre().getId().toString());
+        return bookService.updateBook(book.getId(), bookTitle, author, genre);
     }
 
     @Override

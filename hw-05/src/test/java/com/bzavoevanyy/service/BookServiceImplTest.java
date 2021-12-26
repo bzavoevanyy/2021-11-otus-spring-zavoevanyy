@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -50,11 +49,10 @@ class BookServiceImplTest {
     @Test
     @DisplayName(" should create Book object and call BookDao.insert with right argument")
     void createBook() {
-        final Map<String, Object> testMap = Map.of("book_id", 1L,
-                "book_title", "test_book",
-                "author", new Author(1L, "test_author"),
-                "genre", new Genre(1L, "test_genre"));
-        bookService.createBook(testMap);
+        var bookTitle = "test_book";
+        var author = new Author(1L, "test_author");
+        var genre = new Genre(1L, "test_genre");
+        bookService.createBook(bookTitle, author, genre);
 
         verify(bookDao, times(1)).insert(new Book(null, "test_book", new Author(1L, "test_author"),
                 new Genre(1L, "test_genre")));
@@ -72,11 +70,11 @@ class BookServiceImplTest {
     @Test
     @DisplayName(" should create Book object and call BookDao.update with right argument")
     void updateBook() {
-        final Map<String, Object> testMap = Map.of("book_id", 1L,
-                "book_title", "test_book",
-                "author", new Author(1L, "test_author"),
-                "genre", new Genre(1L, "test_genre"));
-        bookService.updateBook(testMap);
+        var bookId = 1L;
+        var bookTitle = "test_book";
+        var author = new Author(1L, "test_author");
+        var genre = new Genre(1L, "test_genre");
+        bookService.updateBook(bookId, bookTitle, author, genre);
 
         verify(bookDao, times(1)).update(new Book(1L, "test_book", new Author(1L, "test_author"),
                 new Genre(1L, "test_genre")));

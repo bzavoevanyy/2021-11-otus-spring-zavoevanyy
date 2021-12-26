@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +25,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void createBook(Map<String, Object> bookArgs) {
-        bookDao.insert(new Book(null,
-                (String) bookArgs.get("book_title"),
-                (Author) bookArgs.get("author"),
-                (Genre) bookArgs.get("genre")));
+    public Long createBook(String bookTitle, Author author, Genre genre) {
+        return bookDao.insert(new Book(null, bookTitle, author, genre));
     }
 
     @Override
@@ -39,11 +35,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void updateBook(Map<String, Object> bookArgs) {
-        bookDao.update(new Book(
-                (Long) bookArgs.get("book_id"),
-                (String) bookArgs.get("book_title"),
-                (Author) bookArgs.get("author"),
-                (Genre) bookArgs.get("genre")));
+    public int updateBook(Long bookId, String bookTitle, Author author, Genre genre) {
+        return bookDao.update(new Book(bookId, bookTitle, author, genre));
     }
 }
