@@ -1,0 +1,29 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+  messages:
+    basename: i18n/messages
+  main:
+    allow-circular-references: true
+quiz:
+  headers:
+    - id
+    - question
+    - option1
+    - option2
+    - option3
+    - option4
+    - rightAnswer
+  min-score: 4
+  locale: en
+  languages:
+    en: en
+    ru: ru-RU
+  file-name: data/quiz-test.csv
+shell:
+  out:
+    info: CYAN
+    success: GREEN
+    warning: YELLOW
+    error: RED

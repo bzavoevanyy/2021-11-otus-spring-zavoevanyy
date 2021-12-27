@@ -1,0 +1,6 @@
+id;question;option1;option2;option3;option4;rightAnswer
+1;Какой класс Map наиболее популярным в многопоточной среде с учетом ограничений производительности?;Hashtable;CopyOnWriteMap;ConcurrentHashMap;ConcurrentMap;2
+2;Что из нижеперечисленного обеспечивает удаление элементов коллекции?;Enumeration;Iterator;Никакой из них;;2
+3;Интрфейс Comparator содержит метод?;compareWith;compareTo();compare();;3
+4;Что из нижеперчисленного обеспечивает лучшую производительность?;TreeMap;HashMap;LinkedHashMap;;2
+5;Что из этого синхронизированно?;ArrayList;LinkedList;Vector;Никакой из них;3
