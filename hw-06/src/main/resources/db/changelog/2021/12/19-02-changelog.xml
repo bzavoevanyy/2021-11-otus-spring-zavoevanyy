@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="1639923343372-1" author="bogdanzavoevanyy">
+        <createTable tableName="books">
+            <column name="book_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_book"/>
+            </column>
+            <column name="book_title" type="character varying(50)">
+            </column>
+            <column name="author_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="fk_books_author"
+                             references="authors(author_id)"/>
+            </column>
+            <column name="genre_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="fk_books_genre"
+                             references="genres(genre_id)"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,40 @@
+spring:
+  main:
+    banner-mode: console
+    web-application-type: none
+    log-startup-info: false
+    allow-circular-references: true
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+
+    properties:
+      hibernate:
+# Можно включить для проверки запросов и N+1
+#        format_sql: true
+#    show-sql: true
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-root.xml
+    contexts: DEV
+  h2:
+    console:
+      settings:
+        web-allow-others: true
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+shell:
+  out:
+    info: CYAN
+    success: GREEN
+    warning: YELLOW
+    error: RED
+logging:
+  file:
+    name: hw06.log
+  pattern:
+    console:
