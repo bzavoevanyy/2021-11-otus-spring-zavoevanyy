@@ -14,6 +14,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
+@NamedEntityGraph(name = "book-entity-graph", attributeNodes = {
+        @NamedAttributeNode("author"),
+        @NamedAttributeNode("genre")
+})
 public class Book {
     @Id
     @Column(name = "book_id")
@@ -21,11 +25,13 @@ public class Book {
     private Long id;
     @Column(name = "book_title")
     private String title;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
+    @ToString.Exclude
     private Author author;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
+    @ToString.Exclude
     private Genre genre;
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "book")
     @ToString.Exclude

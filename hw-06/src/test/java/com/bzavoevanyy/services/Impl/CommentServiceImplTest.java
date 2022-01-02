@@ -22,11 +22,11 @@ import static org.mockito.Mockito.*;
 @DisplayName("CommentServiceImpl test")
 class CommentServiceImplTest {
     @MockBean
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
     @MockBean
-    BookServiceImpl bookService;
+    private BookServiceImpl bookService;
     @Autowired
-    CommentServiceImpl commentService;
+    private CommentServiceImpl commentService;
 
     @Test
     @DisplayName(" should call repository method save with right args")

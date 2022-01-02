@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -20,7 +21,9 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Optional<Book> findById(Long id) {
-        return Optional.ofNullable(em.find(Book.class, id));
+        val entityGraph = em.createEntityGraph("book-entity-graph");
+        final Map<String, Object> properties = Map.of("javax.persistence.fetchgraph", entityGraph);
+        return Optional.ofNullable(em.find(Book.class, id, properties));
     }
 
     @Override

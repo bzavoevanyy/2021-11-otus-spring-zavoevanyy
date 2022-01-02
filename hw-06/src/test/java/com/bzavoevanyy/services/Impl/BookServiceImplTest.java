@@ -24,9 +24,9 @@ import static org.mockito.Mockito.*;
 @DisplayName("BookService test")
 class BookServiceImplTest {
     @MockBean
-    BookRepository bookRepository;
+    private BookRepository bookRepository;
     @Autowired
-    BookService bookService;
+    private BookService bookService;
 
     @Test
     @DisplayName(" should throw BookNotFoundException")
