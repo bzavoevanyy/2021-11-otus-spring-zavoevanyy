@@ -1,0 +1,27 @@
+spring:
+  main:
+    banner-mode: console
+    web-application-type: none
+    allow-circular-references: true
+  shell:
+    interactive:
+      enabled: false
+  mongodb:
+    embedded:
+      version: latest
+  data:
+    mongodb:
+      uri: mongodb://localhost:0
+      database: test
+
+
+mongock:
+  runner-type: "ApplicationRunner" # default
+  change-logs-scan-package:
+    - com.bzavoevanyy.mongock.test.changelog
+shell:
+  out:
+    info: CYAN
+    success: GREEN
+    warning: YELLOW
+    error: RED
