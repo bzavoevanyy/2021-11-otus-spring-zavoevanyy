@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts/common-header :: common_header(~{::title}, ~{})">
+    <title>Hw-09</title>
+</head>
+<body>
+<th:block th:replace="layouts/common-body :: common-body(~{::genre-content})">
+    <div th:fragment="genre-content">
+        <h3>Список жанров</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Genre id</th>
+                <th scope="col">Genre name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="genre : ${genres}">
+                <th scope="row" th:text="${genre.genreId}">1</th>
+                <td th:text="${genre.genreName}">Mark</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editGenreModal"
+                            th:attr="data-genre-id=${genre.genreId}">
+                        Edit
+                    </button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteGenreModal"
+                            th:attr="data-genre-id=${genre.genreId}">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button  type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#editGenreModal" data-genre-id="0">
+            Add genre</button>
+        <div class="modal fade" id="editGenreModal" tabindex="-1" aria-labelledby="genreModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="genreModalLabel">Edit genre</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="genreData" method="post">
+                            <div class="mb-3">
+                                <label for="inputGenreId1" class="form-label">Genre Id</label>
+                                <input type="number" class="form-control" id="inputGenreId1" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="genreName1" class="form-label">Genre Name</label>
+                                <input name= "genreName" type="text" class="form-control" id="genreName1" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" id="deleteGenreModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Delete genre?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form id = "deleteGenreForm" method="post">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+<script th:inline="javascript">
+
+    const genres = /*[[${genres}]]*/ null;
+    const editGenreModal = document.getElementById('editGenreModal')
+    editGenreModal.addEventListener('show.bs.modal', function (event) {
+
+        const button = event.relatedTarget
+        const genreId = parseInt(button.getAttribute('data-genre-id'))
+
+        const modalTitle = editGenreModal.querySelector('.modal-title')
+        const modalBodyInputGenreId = editGenreModal.querySelector('#inputGenreId1')
+        const modalBodyInputGenreName = editGenreModal.querySelector('#genreName1')
+
+        const postForm = editGenreModal.querySelector('#genreData')
+        if (genreId === 0) {
+            modalTitle.textContent = "Create new genre"
+            postForm.setAttribute('action', '/genre')
+            editGenreModal.querySelector('#genreData div').style.display = "none"
+            modalBodyInputGenreName.value = ""
+        } else {
+            postForm.setAttribute('action', '/genre/' + genreId)
+            editGenreModal.querySelector('#genreData div').style.display = ""
+            modalTitle.textContent = 'Edit genre with id ' + genreId
+            modalBodyInputGenreId.value = genreId
+
+            const genre = genres.find((genre) => genre.genreId === genreId)
+
+            modalBodyInputGenreName.value = genre.genreName
+            modalBodyInputGenreName.textContent = genre.genreName
+        }
+    })
+    const deleteGenreModal = document.getElementById("deleteGenreModal")
+    deleteGenreModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget
+        const genreId = button.getAttribute('data-genre-id')
+        const deleteForm = document.getElementById("deleteGenreForm")
+        deleteForm.setAttribute("action", "/genre/delete/" + genreId)
+    })
+</script>
+</html>

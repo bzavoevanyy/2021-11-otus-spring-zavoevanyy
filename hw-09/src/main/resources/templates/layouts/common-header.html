@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common_header(title, links)">
+
+    <title th:replace="${title}">The awesome application</title>
+
+    <!--     Common styles and scripts -->
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <th:block th:replace="${links}"/>
+
+</head>
+
+</html>

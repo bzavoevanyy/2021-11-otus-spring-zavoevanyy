@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts/common-header :: common_header(~{::title}, ~{})">
+    <meta charset="UTF-8">
+    <title>Books</title>
+
+</head>
+<body>
+
+<th:block th:replace="layouts/common-body :: common-body(~{::books-content})">
+    <div th:fragment="books-content">
+        <h3 th:if = "${comments == null}">Список книг в библиотеке</h3>
+        <h3 th:if = "${comments != null}">Список комментариев</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Book id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Genre</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}">
+                <th scope="row" th:text="${book.id}">1</th>
+                <td ><a href="#" class="link-primary" th:href="${'/book/' + book.id}" th:text="${book.title}">Primary link</a></td>
+                <td th:text="${book.authorName}">Otto</td>
+                <td th:text="${book.genreName}">@mdo</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editBookModal"
+                            th:attr="data-book-id=${book.id}">
+                        Edit
+                    </button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteBookModal"
+                            th:attr="data-book-id=${book.id}">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <button th:if = "${comments == null}" type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#editBookModal" data-book-id="0">
+            Add book</button>
+
+        <table th:if = "${comments != null}"class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Comment</th>
+                <th scope="col">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="comment : ${comments}">
+                <th scope="row" th:text="${comment.commentId}">1</th>
+                <td th:text="${comment.comment}">Mark</td>
+                <td th:text="${comment.commentDate}">Otto</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCommentModal"
+                            th:attr="data-comment-id=${comment.commentId}">
+                        Edit
+                    </button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteCommentModal"
+                            th:attr="data-comment-id=${comment.commentId}">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if = "${comments != null}" class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="commentModalLabel">Edit comment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="commentData" method="post">
+                            <input name= "bookId" th:value="${books.get(0).id}" hidden>
+                            <div class="mb-3">
+                                <label for="inputCommentId1" class="form-label">Comment Id</label>
+                                <input type="number" class="form-control" id="inputCommentId1" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comment1" class="form-label">Comment</label>
+                                <input name= "comment" type="text" class="form-control" id="comment1" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button th:if = "${comments != null}" type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#editCommentModal" data-comment-id="0">
+            Add comment</button>
+        <div class="modal fade" id="editBookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit book</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="bookData" method="post">
+                            <div class="mb-3">
+                                <label for="inputId1" class="form-label">Book Id</label>
+                                <input type="number" class="form-control" id="inputId1" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bookTitle1" class="form-label">Title</label>
+                                <input name= "title" type="text" class="form-control" id="bookTitle1" required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <select name="authorId" class="form-select" id="inputAuthor1" required>
+                                    <option selected>Choose...</option>
+                                    <option th:each="author: ${authors}" th:attr="value=${author.authorId}"
+                                            th:text="${author.authorName}">One
+                                    </option>
+                                </select>
+                                <label class="input-group-text" for="inputAuthor1">Author</label>
+
+                            </div>
+                            <div class="input-group mb-3">
+                                <select name="genreId" class="form-select" id="inputGenre1" required>
+                                    <option selected>Choose...</option>
+                                    <option th:each="genre: ${genres}" th:attr="value=${genre.genreId}"
+                                            th:text="${genre.genreName}">One
+                                    </option>
+                                </select>
+                                <label class="input-group-text" for="inputGenre1">Genre</label>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" id="deleteBookModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Delete book?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form id = "deleteBookForm" method="post">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if = "${comments != null}" class="modal" tabindex="-1" id="deleteCommentModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Delete comment?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form id = "deleteCommentForm" method="post">
+                            <input hidden name="bookId" th:value="${books.get(0).id}">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+<script th:inline="javascript">
+
+    const books = /*[[${books}]]*/ null;
+    const authors = /*[[${authors}]]*/ null;
+    const genres = /*[[${genres}]]*/ null;
+    const editBookModal = document.getElementById('editBookModal')
+    editBookModal.addEventListener('show.bs.modal', function (event) {
+
+        const button = event.relatedTarget
+        const bookId = parseInt(button.getAttribute('data-book-id'))
+
+        const modalTitle = editBookModal.querySelector('.modal-title')
+        const modalBodyInputId = editBookModal.querySelector('#inputId1')
+        const modalBodyInputTitle = editBookModal.querySelector('#bookTitle1')
+        const modalBodySelectAuthorName = editBookModal.querySelector('#inputAuthor1 option')
+        const modalBodySelectGenreName = editBookModal.querySelector('#inputGenre1 option')
+
+        const postForm = editBookModal.querySelector('#bookData')
+        if (bookId === 0) {
+            modalTitle.textContent = "Create new book"
+            postForm.setAttribute('action', '/book')
+            editBookModal.querySelector('#bookData div').style.display = "none"
+            modalBodyInputTitle.value = ""
+            modalBodySelectAuthorName.textContent = "Choose..."
+            modalBodySelectAuthorName.value = ""
+            modalBodySelectGenreName.textContent = "Choose..."
+            modalBodySelectGenreName.value = ""
+        } else {
+            postForm.setAttribute('action', '/book/' + bookId)
+            editBookModal.querySelector('#bookData div').style.display = ""
+            modalTitle.textContent = 'Edit book with id ' + bookId
+            modalBodyInputId.value = bookId
+
+            const book = books.find((book) => book.id === bookId)
+            const author = authors.find((author)=> book.authorId === author.authorId)
+            const genre = genres.find((genre)=> book.genreId === genre.genreId)
+            modalBodyInputTitle.value = book.title
+            modalBodySelectAuthorName.textContent = author.authorName
+            modalBodySelectAuthorName.value = book.authorId
+            modalBodySelectGenreName.textContent = genre.genreName
+            modalBodySelectGenreName.value = book.genreId
+        }
+    })
+    const deleteBookModal = document.getElementById("deleteBookModal")
+    deleteBookModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget
+        const bookId = button.getAttribute('data-book-id')
+        const deleteForm = document.getElementById("deleteBookForm")
+        deleteForm.setAttribute("action", "/book/delete/" + bookId)
+    })
+</script>
+<script th:if = "${comments != null}" th:inline="javascript">
+
+    const comments = /*[[${comments}]]*/ null;
+    const editCommentModal = document.getElementById('editCommentModal')
+    editCommentModal.addEventListener('show.bs.modal', function (event) {
+
+        const button = event.relatedTarget
+        const commentId = parseInt(button.getAttribute('data-comment-id'))
+
+        const modalTitle = editCommentModal.querySelector('.modal-title')
+        const modalBodyInputCommentId = editCommentModal.querySelector('#inputCommentId1')
+        const modalBodyInputComment = editCommentModal.querySelector('#comment1')
+
+        const postForm = editCommentModal.querySelector('#commentData')
+        if (commentId === 0) {
+            modalTitle.textContent = "Create new comment"
+            postForm.setAttribute('action', '/comment')
+            editCommentModal.querySelector('#commentData div').style.display = "none"
+            modalBodyInputComment.value = ""
+        } else {
+            postForm.setAttribute('action', '/comment/' + commentId)
+            editCommentModal.querySelector('#commentData div').style.display = ""
+            modalTitle.textContent = 'Edit comment with id ' + commentId
+            modalBodyInputCommentId.value = commentId
+
+            const comment = comments.find((comment) => comment.commentId === commentId)
+
+            modalBodyInputComment.value = comment.comment
+            modalBodyInputComment.textContent = comment.comment
+        }
+    })
+    const deleteCommentModal = document.getElementById("deleteCommentModal")
+    deleteCommentModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget
+        const commentId = button.getAttribute('data-comment-id')
+        const deleteForm = document.getElementById("deleteCommentForm")
+        deleteForm.setAttribute("action", "/comment/delete/" + commentId)
+    })
+</script>
+</html>
