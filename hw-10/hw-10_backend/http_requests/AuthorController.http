@@ -1,0 +1,28 @@
+DELETE http://localhost:8080/author/5
+Content-Type: application/json
+
+{}
+
+###
+PUT http://localhost:8080/author/1
+Content-Type: application/json
+
+{
+  "authorId": 1,
+  "authorName" : "new author"
+}
+
+###
+POST http://localhost:8080/author
+Content-Type: application/json
+
+{
+  "authorName" : "new author"
+}
+
+###
+
+GET http://localhost:8080/author
+Accept: application/json
+
+###

@@ -1,0 +1,28 @@
+DELETE http://localhost:8080/comment/2
+Content-Type: application/json
+
+{}
+
+###
+PUT http://localhost:8080/comment/1
+Content-Type: application/json
+
+{
+  "comment": "test comment",
+  "bookId": 1
+}
+
+###
+POST http://localhost:8080/comment
+Content-Type: application/json
+
+{
+  "comment": "next comment",
+  "bookId": 1
+}
+
+###
+GET http://localhost:8080/comment?bookId=1
+Accept: application/json
+
+###

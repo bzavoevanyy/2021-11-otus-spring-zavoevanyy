@@ -1,0 +1,33 @@
+
+PUT http://localhost:8080/genre/1
+Content-Type: application/json
+
+{
+  "genreName": "test genre"
+}
+
+###
+POST http://localhost:8080/genre
+Content-Type: application/json
+
+{
+  "genreName": "new genre"
+}
+
+###
+GET http://localhost:8080/genre
+Accept: application/json
+
+###
+DELETE http://localhost:8080/genre/1
+Content-Type: application/json
+
+{}
+
+###
+DELETE http://localhost:8080/genre/4
+Content-Type: application/json
+
+{}
+
+###
