@@ -1,0 +1,29 @@
+spring:
+  main:
+    banner-mode: console
+    web-application-type: none
+    log-startup-info: false
+    allow-circular-references: true
+  mongodb:
+    embedded:
+      version: latest
+  data:
+    mongodb:
+      uri: mongodb://localhost:0
+      database: library
+mongock:
+#  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - com.bzavoevanyy.mongock.changelog
+shell:
+  out:
+    info: CYAN
+    success: GREEN
+    warning: YELLOW
+    error: RED
+logging:
+  file:
+    name: hw08.log
+  pattern:
+    console:
