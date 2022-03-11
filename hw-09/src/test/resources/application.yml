@@ -1,0 +1,17 @@
+spring:
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-root.xml
+    contexts: TST
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+    generate-ddl: false
+    properties:
+      hibernate:
+        format_sql: true
+
