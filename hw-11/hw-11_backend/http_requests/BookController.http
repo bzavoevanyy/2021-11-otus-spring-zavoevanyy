@@ -1,0 +1,41 @@
+DELETE http://localhost:8080/api/book/7366f265-82fa-4ade-b62f-2bc3a1281b64
+Accept: application/json
+
+###
+PUT http://localhost:8080/api/book
+Content-Type: application/json
+
+{
+  "id": "c2c30180-f414-45a3-a75d-66598e1a0142",
+  "title": "updated book",
+  "authorId": "cb106b51-6c43-48b4-bc7b-c8915ed8eee9",
+  "authorName": "author0",
+  "genreId": "bda55009-715e-4808-867f-98be86ed793f",
+  "genreName": "genre1"
+}
+
+###
+POST http://localhost:8080/api/book
+Content-Type: application/json
+
+{
+  "title": "text book",
+  "authorId": "cb106b51-6c43-48b4-bc7b-c8915ed8eee9",
+  "authorName": "author0",
+  "genreId": "bda55009-715e-4808-867f-98be86ed793f",
+  "genreName": "genre1"
+}
+
+###
+GET http://localhost:8080/api/book
+Accept: application/json
+
+###
+GET http://localhost:8080/api/book/fc13ba1d-3fad-472e-8986-43b25e50002a
+Accept: application/json
+
+###
+GET http://localhost:8080/api/book/
+Accept: application/json
+
+###

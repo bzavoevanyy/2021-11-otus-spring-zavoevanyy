@@ -1,0 +1,27 @@
+DELETE http://localhost:8080/api/author/911a3c57-974f-43aa-a812-f589b5e48e3
+Content-Type: application/json
+
+{}
+
+###
+PUT http://localhost:8080/api/author/cb106b51-6c43-48b4-bc7b-c8915ed8eee9
+Content-Type: application/json
+
+{
+  "authorName" : "new author3"
+}
+
+###
+POST http://localhost:8080/api/author
+Content-Type: application/json
+
+{
+  "authorName" : "new author"
+}
+
+###
+
+GET http://localhost:8080/api/author
+Accept: application/json
+
+###

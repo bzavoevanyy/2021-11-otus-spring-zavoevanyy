@@ -1,0 +1,29 @@
+DELETE http://localhost:8080/api/comment/511aed5a-020c-463b-8015-3f298451bfac
+Content-Type: application/json
+
+{}
+
+###
+PUT http://localhost:8080/api/comment
+Content-Type: application/json
+
+{
+  "id": "facfe147-6567-4241-acb4-ae91f183be25",
+  "comment": "test comment",
+  "bookId": "54b57c64-3c75-48f3-8d19-7fb6c65f1f19"
+}
+
+###
+POST http://localhost:8080/api/comment
+Content-Type: application/json
+
+{
+  "comment": "next comment",
+  "bookId": "54b57c64-3c75-48f3-8d19-7fb6c65f1f19"
+}
+
+###
+GET http://localhost:8080/api/comment?bookId=54b57c64-3c75-48f3-8d19-7fb6c65f1f19
+Accept: application/json
+
+###
