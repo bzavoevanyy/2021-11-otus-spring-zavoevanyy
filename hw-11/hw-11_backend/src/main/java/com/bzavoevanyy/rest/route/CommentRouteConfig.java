@@ -2,7 +2,7 @@ package com.bzavoevanyy.rest.route;
 
 import com.bzavoevanyy.repository.CommentRepository;
 import com.bzavoevanyy.rest.route.dto.CommentDto;
-import com.bzavoevanyy.rest.route.dto.SuccessResponse;
+import com.bzavoevanyy.rest.route.dto.CustomResponse;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -72,7 +72,7 @@ public class CommentRouteConfig {
         Mono<ServerResponse> delete(ServerRequest request) {
             val commentId = request.pathVariable("id");
             return repository.deleteById(commentId)
-                    .then(ok().body(fromValue(new SuccessResponse("Deleted"))));
+                    .then(ok().body(fromValue(new CustomResponse("Deleted"))));
         }
     }
 
