@@ -1,0 +1,33 @@
+
+PUT http://localhost:8080/api/genre/dcb46321-271a-4666-b7a5-227055030736
+Content-Type: application/json
+
+{
+  "genreName": "test genre"
+}
+
+###
+POST http://localhost:8080/api/genre
+Content-Type: application/json
+
+{
+  "genreName": "new genre"
+}
+
+###
+GET http://localhost:8080/api/genre
+Accept: application/json
+
+###
+GET http://localhost:8080/api/genre/60ff3b03-1f60-472c-b7b2-fc50c7275f1d
+Content-Type: application/json
+
+{}
+
+###
+DELETE http://localhost:8080/api/genre/bda55009-715e-4808-867f-98be86ed793f
+Content-Type: application/json
+
+{}
+
+###
