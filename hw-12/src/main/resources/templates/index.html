@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts/common-header :: common_header(~{::title}, ~{})">
+    <title>Hw-09</title>
+</head>
+<body>
+<th:block th:replace="layouts/common-body :: common-body(~{::main})">
+    <div th:fragment="main">
+        <h3>Welcome</h3>
+    </div>
+</th:block>
+</body>
+</html>
