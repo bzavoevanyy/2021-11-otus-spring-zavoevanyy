@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts/common-header :: common_header(~{::title}, ~{})">
+    <title>Hw-09</title>
+</head>
+<body>
+<th:block th:replace="layouts/common-body :: common-body(~{::author-content})">
+    <div th:fragment="author-content">
+        <h3>Список авторов</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Author id</th>
+                <th scope="col">Author name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="author : ${authors}">
+                <th scope="row" th:text="${author.authorId}">1</th>
+                <td th:text="${author.authorName}">Mark</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editAuthorModal"
+                            th:attr="data-author-id=${author.authorId}">
+                        Edit
+                    </button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteAuthorModal"
+                            th:attr="data-author-id=${author.authorId}">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button  type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#editAuthorModal" data-author-id="0">
+            Add author</button>
+        <div class="modal fade" id="editAuthorModal" tabindex="-1" aria-labelledby="authorModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="authorModalLabel">Edit author</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="authorData" method="post">
+                            <div class="mb-3">
+                                <label for="inputAuthorId1" class="form-label">Author Id</label>
+                                <input type="number" class="form-control" id="inputAuthorId1" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="authorName1" class="form-label">Author Name</label>
+                                <input name= "authorName" type="text" class="form-control" id="authorName1" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" id="deleteAuthorModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Delete author?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form id = "deleteAuthorForm" method="post">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+<script th:inline="javascript">
+
+    const authors = /*[[${authors}]]*/ null;
+    const editAuthorModal = document.getElementById('editAuthorModal')
+    editAuthorModal.addEventListener('show.bs.modal', function (event) {
+
+        const button = event.relatedTarget
+        const authorId = parseInt(button.getAttribute('data-author-id'))
+
+        const modalTitle = editAuthorModal.querySelector('.modal-title')
+        const modalBodyInputAuthorId = editAuthorModal.querySelector('#inputAuthorId1')
+        const modalBodyInputAuthorName = editAuthorModal.querySelector('#authorName1')
+
+        const postForm = editAuthorModal.querySelector('#authorData')
+        if (authorId === 0) {
+            modalTitle.textContent = "Create new author"
+            postForm.setAttribute('action', '/author')
+            editAuthorModal.querySelector('#authorData div').style.display = "none"
+            modalBodyInputAuthorName.value = ""
+        } else {
+            postForm.setAttribute('action', '/author/' + authorId)
+            editAuthorModal.querySelector('#authorData div').style.display = ""
+            modalTitle.textContent = 'Edit author with id ' + authorId
+            modalBodyInputAuthorId.value = authorId
+
+            const author = authors.find((author) => author.authorId === authorId)
+
+            modalBodyInputAuthorName.value = author.authorName
+            modalBodyInputAuthorName.textContent = author.authorName
+        }
+    })
+    const deleteAuthorModal = document.getElementById("deleteAuthorModal")
+    deleteAuthorModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget
+        const authorId = button.getAttribute('data-author-id')
+        const deleteForm = document.getElementById("deleteAuthorForm")
+        deleteForm.setAttribute("action", "/author/delete/" + authorId)
+    })
+</script>
+</html>

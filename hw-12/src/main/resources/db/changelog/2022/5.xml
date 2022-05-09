@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <changeSet id="hw-12" author="zavoevanyy.bogdan">
+        <createTable tableName="user">
+            <column name="user_id" type="bigint" autoIncrement="true"/>
+            <column name="name" type="character varying"/>
+            <column name="email" type="character varying"/>
+            <column name="password" type="character varying"/>
+            <column name="role" type="character varying"/>
+        </createTable>
+
+        <insert tableName="user">
+            <column name="name" value="admin"/>
+            <column name="email" value="admin@google.com"/>
+            <!--            default password = "password"-->
+            <column name="password" value="$2a$12$LMmxxVN2Mki7QUUwkD5e9uVryk0iRqeKoRHANdHQiVqUvpk9u/uSq"/>
+            <column name="role" value="ADMIN"/>
+        </insert>
+
+        <insert tableName="user">
+            <column name="name" value="user"/>
+            <column name="email" value="user@google.com"/>
+            <!--            default password = "password"-->
+            <column name="password" value="$2a$12$LMmxxVN2Mki7QUUwkD5e9uVryk0iRqeKoRHANdHQiVqUvpk9u/uSq"/>
+            <column name="role" value="USER"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
